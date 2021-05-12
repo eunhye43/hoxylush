@@ -30,10 +30,8 @@ class SubCategory(models.Model):
 
 class ProductDescription(models.Model):
     product           = models.ForeignKey("Product", on_delete=models.CASCADE)
-    description1      = models.CharField(max_length=500)
-    description2      = models.CharField(max_length=500)
-    description3      = models.CharField(max_length=500)
-    description_image = models.CharField(max_length=500)
+    description       = models.TextField()
+    image_url         = models.URLField(max_length=500)
 
     class Meta:
         db_table = "product_descriptions"
@@ -41,7 +39,7 @@ class ProductDescription(models.Model):
 class ProductOption(models.Model):
     product           = models.ForeignKey("Product", on_delete=models.CASCADE)
     weight            = models.CharField(max_length=100)
-    price             = models.IntegerField()
+    price             = models.DecimalField(max_digits=10, decimal_places=2)
     quantity          = models.IntegerField()
 
     class Meta:
@@ -57,7 +55,7 @@ class ProductImage(models.Model):
 class Ingredient(models.Model):
     product             = models.ForeignKey("Product", on_delete=models.CASCADE)
     name                = models.CharField(max_length=100)
-    description         = models.CharField(max_length=500)
+    description         = models.TextField()
     image_url           = models.URLField(max_length=500)
 
     class Meta:
@@ -65,7 +63,7 @@ class Ingredient(models.Model):
 
 class Review(models.Model):
     user       = models.ForeignKey("User", on_delete=models.CASCADE)
-    review     = models.CharField(max_length=1000)
+    content    = models.CharField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
