@@ -1,11 +1,13 @@
 from django.db        import models
+
 from users.models     import User
+
 
 class Product(models.Model):
     name_korean       = models.CharField(max_length=100)
     name_english      = models.CharField(max_length=100)
-    hit               = models.IntegerField()
-    video_url         = models.CharField(max_length=500)
+    hit               = models.IntegerField(default=0)
+    video_url         = models.URLField(max_length=500)
     category          = models.ForeignKey("Category", on_delete=models.CASCADE)
     sub_category      = models.ForeignKey("SubCategory", on_delete=models.CASCADE)
     user              = models.ManyToManyField("User", through="Like")
@@ -40,40 +42,26 @@ class ProductOption(models.Model):
     product           = models.ForeignKey("Product", on_delete=models.CASCADE)
     weight            = models.CharField(max_length=100)
     price             = models.IntegerField()
+    quantity          = models.IntegerField()
 
     class Meta:
         db_table = "product_options"
 
 class ProductImage(models.Model):
     product           = models.ForeignKey("Product", on_delete=models.CASCADE)
-    image_url         = models.CharField(max_length=500)
+    image_url         = models.URLField(max_length=500)
 
     class Meta:
         db_table = "product_images"
 
-class Stock(models.Model):
-    product_option    = models.ForeignKey("ProductOption", on_delete=models.CASCADE)
-    quantity          = models.IntegerField()
-
-    class Meta:
-        db_table = "stocks"
-
 class Ingredient(models.Model):
-    product_description = models.ForeignKey("ProductDescription", on_delete=models.CASCADE)
+    product             = models.ForeignKey("Product", on_delete=models.CASCADE)
     name                = models.CharField(max_length=100)
     description         = models.CharField(max_length=500)
+    image_url           = models.URLField(max_length=500)
 
     class Meta:
         db_table = "ingredients"
-
-class Review(models.Model):
-    account    = models.ForeignKey("User", on_delete=models.CASCADE)
-    review     = models.CharField(max_length=1000)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = "reviews"
 
 class Review(models.Model):
     user       = models.ForeignKey("User", on_delete=models.CASCADE)
@@ -86,7 +74,7 @@ class Review(models.Model):
 
 class ReviewImage(models.Model):
     review    = models.ForeignKey("Review", on_delete=models.CASCADE)
-    image_url = models.CharField(max_length=500)
+    image_url = models.URLField(max_length=500)
     class Meta:
         db_table = "review_images"
 
