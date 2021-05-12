@@ -10,7 +10,7 @@ class Product(models.Model):
     video_url         = models.URLField(max_length=500)
     category          = models.ForeignKey("Category", on_delete=models.CASCADE)
     sub_category      = models.ForeignKey("SubCategory", on_delete=models.CASCADE)
-    user              = models.ManyToManyField("User", through="Like")
+    user              = models.ManyToManyField(User, through="Like")
 
     class Meta:
         db_table = "products"
@@ -62,8 +62,9 @@ class Ingredient(models.Model):
         db_table = "ingredients"
 
 class Review(models.Model):
-    user       = models.ForeignKey("User", on_delete=models.CASCADE)
+    user       = models.ForeignKey(User, on_delete=models.CASCADE)
     content    = models.CharField(max_length=1000)
+    rating     = models.IntgerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -77,7 +78,7 @@ class ReviewImage(models.Model):
         db_table = "review_images"
 
 class Like(models.Model):
-    user    = models.ForeignKey("User", on_delete=models.CASCADE)
+    user    = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey("Product", on_delete=models.CASCADE)
 
     class Meta:
