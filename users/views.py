@@ -6,7 +6,7 @@ from django.views import View
 from django.http  import JsonResponse
 from users.models import User
 
-class SignUpViews(View):
+class SignUpView(View):
     def post(self, request):
         try:
             data         = json.loads(request.body)
