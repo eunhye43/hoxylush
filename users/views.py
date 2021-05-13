@@ -1,18 +1,19 @@
 import json
 import bcrypt
 import jwt
+import re
 
-from json.decoder import JSONDecodeError
-from django.views import View
-from django.http  import JsonResponse
+from django.views         import View
+from django.http          import JsonResponse
+from json.decoder         import JSONDecodeError
+
 from users.models import User
-from my_settings  import SECRET_KEY
+from my_settings  import SECRET_KEY, ALGORITHM
+
 class SignUpView(View):
     def post(self, request):
         try:
-            
             data         = json.loads(request.body)
-
             account      = data["account"]
             password     = data["password"]
             email        = data["email"]
@@ -20,37 +21,32 @@ class SignUpView(View):
             nickname     = data.get("nickname")
             address      = data.get("address")
 
-            PASSWORD_LENGTH = 8
+            email_validation    = re.compile('^[a-z0-9]+@[a-z0-9]+\.[a-z0-9.]+$', re.I)
+            password_validation = re.compile(r'^(?=.*[a-z])(?=.*[0-9])(?=.*[~!@#$%^&*]).{8,}', re.I)
 
-            if email == "" or password == "":
-                return JsonResponse({"MESSAGE" : "KEY_ERROR"}, status=400)
+            if not email_validation.match(email):
+                return JsonResponse({"MESSAGE" : "INVALID_EMAIL"}, status=400)
 
-            if email.count("@") == 0 or email.count(".") == 0:
-                return JsonResponse({"MESSAGE" : "KEY_ERROR"}, status=400)
+            if not password_validation.match(password):
+                return JsonResponse({"MESSAGE" : "INVALID_PASSWORD"}, status=400)
+           
+            if User.objects.filter(phone_number=data.get('phone_number')).exists()\
+                and data.get('phone_number') != None:
+                return JsonResponse({'MESSAGE': 'ALREADY_EXISTS'}, status = 400)
 
-            if len(password) < PASSWORD_LENGTH:
-                return JsonResponse({"MESSAGE" : "KEY_ERROR"}, status=400)
+            if User.objects.filter(nickname=data.get('nickname')).exists()\
+                and data.get('nickname') != None:
+                return JsonResponse({'MESSAGE' : 'ALREADY_EXISTS'}, status = 400)
 
-            if User.objects.filter(phone_number=phone_number).exists():
-                return JsonResponse({"MESSAGE" : "ALREADY_EXISTS"}, status=400)
-
-            if User.objects.filter(nickname=nickname).exists()\
-                and data.get("nickname") != None:
-                return JsonResponse({"MESSAGE" : "ALREADY_EXISTS"}, status=400)
-
-            if User.objects.filter(address=address).exists()\
-                and data.get("nickname") != None:
-                return JsonResponse({"MESSAGE" : "ALREADY_EXISTS"}, status=400)
-            
             hashed_password= bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
             User.objects.create(
-                account=account,
-                password=hashed_password,
-                email=email,
-                phone_number=phone_number,
-                nickname=nickname,
-                address=address
+                account      = account,
+                password     = hashed_password,
+                email        = email,
+                phone_number = phone_number,
+                nickname     = nickname,
+                address      = address
                 )
             return JsonResponse({"MESSAGE" : "SUCCESS"}, status = 201)
 
@@ -67,18 +63,15 @@ class LogInView(View):
             if not bcrypt.checkpw(data["password"].encode("utf-8"), hashed_password):
                 return JsonResponse({"MESSAGE":"INVALID_USER"}, status=401)
 
-            access_token = jwt.encode(
-            {"account" : user.account},  
-            SECRET_KEY,
-            algorithm = "HS256"
-            )
+            access_token = jwt.encode({"account" : user.account}, SECRET_KEY, algorithm = ALGORITHM)
+
             return JsonResponse({"MESSAGE":"SUCCESS", "ACCESS_TOKEN": access_token}, status=200)
         
         except json.JSONDecodeError as e:
             return JsonResponse({"MESSAGE": e.__cause__}) 
         
         except User.DoesNotExist:
-            return JsonResponse({"MESSAGE": "INVALID_USER"}, status=401)
+            return JsonResponse({"MESSAGE": "INVALID_USER"}, status=404)
         
         except KeyError:
             return JsonResponse({"MESSAGE":"KEY_ERROR"}, status=400)
