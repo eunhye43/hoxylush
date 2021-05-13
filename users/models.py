@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class User(models.Model):                                                       
     account         = models.CharField(max_length=100, unique=True)              
     password        = models.CharField(max_length=300)                          
@@ -12,4 +11,4 @@ class User(models.Model):
     updated_at      = models.DateTimeField(auto_now=True)                      
 
     class Meta:
-        db_table = 'users'
+        db_table = "users"
