@@ -63,15 +63,15 @@ class LogInView(View):
             if not bcrypt.checkpw(data["password"].encode("utf-8"), hashed_password):
                 return JsonResponse({"MESSAGE":"INVALID_USER"}, status=401)
 
-            access_token = jwt.encode({"account" : user.account}, SECRET_KEY, algorithm = ALGORITHM)
+            access_token = jwt.encode({"account" : user.id}, SECRET_KEY, algorithm = ALGORITHM)
 
             return JsonResponse({"MESSAGE":"SUCCESS", "ACCESS_TOKEN": access_token}, status=200)
         
-        except json.JSONDecodeError as e:
-            return JsonResponse({"MESSAGE": e.__cause__}) 
+        except json.JSONDecodeError:
+            return JsonResponse({"MESSAGE": "KEY_ERROR"}, status=404) 
         
         except User.DoesNotExist:
             return JsonResponse({"MESSAGE": "INVALID_USER"}, status=404)
         
         except KeyError:
-            return JsonResponse({"MESSAGE":"KEY_ERROR"}, status=400)
+            return JsonResponse({"MESSAGE" : "KEY_ERROR"}, status=400)
