@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python,django,vscode,vim
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python,django,vscode,vim
 
+
 ### Django ###
 *.log
 *.pot
@@ -14,6 +15,8 @@ media
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
 # <django-project-name>/staticfiles/
+
+20200514.sql
 
 ### Django.Python Stack ###
 # Byte-compiled / optimized / DLL files
