@@ -5,7 +5,6 @@ from users.models     import User
 
 class Product(models.Model):
     name_korean       = models.CharField(max_length=100)
-    name_english      = models.CharField(max_length=100)
     hit               = models.IntegerField(default=0)
     video_url         = models.URLField(max_length=500)
     category          = models.ForeignKey("Category", on_delete=models.CASCADE)
@@ -63,8 +62,9 @@ class Ingredient(models.Model):
 
 class Review(models.Model):
     user       = models.ForeignKey(User, on_delete=models.CASCADE)
+    product    = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     content    = models.CharField(max_length=1000)
-    rating     = models.IntgerField()
+    rating     = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -74,6 +74,7 @@ class Review(models.Model):
 class ReviewImage(models.Model):
     review    = models.ForeignKey("Review", on_delete=models.CASCADE)
     image_url = models.URLField(max_length=500)
+    
     class Meta:
         db_table = "review_images"
 
