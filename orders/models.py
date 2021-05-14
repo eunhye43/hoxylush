@@ -1,6 +1,6 @@
 from django.db          import models
 
-from products.models    import Product
+from products.models    import Product, ProductOption
 from users.models       import User
 
 
@@ -15,10 +15,11 @@ class Order(models.Model):
         db_table = "orders"
 
 class OrderItem(models.Model):
-    product      = models.ForeignKey(Product, on_delete=models.CASCADE)
-    order        = models.ForeignKey("Order", on_delete=models.CASCADE)
-    price        = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity     = models.IntegerField()
+    product        = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_option = models.ForeignKey(ProductOption, on_delete=models.CASCADE)
+    order          = models.ForeignKey("Order", on_delete=models.CASCADE)
+    price          = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity       = models.IntegerField()
 
     class Meta:
         db_table = "order_items"
