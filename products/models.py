@@ -4,7 +4,8 @@ from users.models     import User
 
 
 class Product(models.Model):
-    name_korean       = models.CharField(max_length=100)
+    name              = models.CharField(max_length=100)
+    hashtag           = models.CharField(max_length=100)
     hit               = models.IntegerField(default=0)
     video_url         = models.URLField(max_length=500)
     category          = models.ForeignKey("Category", on_delete=models.CASCADE)
@@ -74,7 +75,6 @@ class Review(models.Model):
 class ReviewImage(models.Model):
     review    = models.ForeignKey("Review", on_delete=models.CASCADE)
     image_url = models.URLField(max_length=500)
-    
     class Meta:
         db_table = "review_images"
 
