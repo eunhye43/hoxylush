@@ -30,8 +30,7 @@ class SignUpView(View):
             if not password_validation.match(password):
                 return JsonResponse({"MESSAGE" : "INVALID_PASSWORD"}, status=400)
            
-            if User.objects.filter(phone_number=data.get('phone_number')).exists()\
-                and data.get('phone_number') != None:
+            if User.objects.filter(phone_number=data.get('phone_number')).exists() and data.get('phone_number') != None:
                 return JsonResponse({'MESSAGE': 'ALREADY_EXISTS'}, status = 400)
 
             if User.objects.filter(nickname=data.get('nickname')).exists()\
