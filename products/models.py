@@ -4,8 +4,8 @@ from users.models     import User
 
 
 class Product(models.Model):
-    name_korean       = models.CharField(max_length=100)
-    name_english      = models.CharField(max_length=100)
+    name              = models.CharField(max_length=100)
+    hashtag           = models.CharField(max_length=100)
     hit               = models.IntegerField(default=0)
     video_url         = models.URLField(max_length=500)
     category          = models.ForeignKey("Category", on_delete=models.CASCADE)
@@ -64,7 +64,7 @@ class Ingredient(models.Model):
 class Review(models.Model):
     user       = models.ForeignKey(User, on_delete=models.CASCADE)
     content    = models.CharField(max_length=1000)
-    rating     = models.IntgerField()
+    rating     = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
