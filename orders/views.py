@@ -20,7 +20,8 @@ class CartView(View):
             "weight"       : item_info.product_option.weight,
             "price"        : int(item_info.product_option.price),
             "total_price"  : int(item_info.price),
-            "quantity"     : item_info.quantity
+            "quantity"     : item_info.quantity,
+            "is_checked"   : True
         } for i, item_info in enumerate(order_items)]
 
         return JsonResponse({'cart_info': cart_info}, status=200)
