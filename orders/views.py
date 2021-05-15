@@ -13,7 +13,7 @@ class CartView(View):
         order_items = OrderItem.objects.filter(order=order)
 
         cart_info = [{
-            "id"           : i,
+            "id"           : item_info.product_option_id,
             "name"         : item_info.product.name,
             "sub_category" : item_info.product.sub_category.sub_title,
             "product_image": item_info.product.productimage_set.first().image_url,
@@ -22,6 +22,6 @@ class CartView(View):
             "total_price"  : int(item_info.price),
             "quantity"     : item_info.quantity,
             "is_checked"   : True
-        } for i, item_info in enumerate(order_items)]
+        } for item_info in order_items]
 
         return JsonResponse({'cart_info': cart_info}, status=200)
