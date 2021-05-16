@@ -21,7 +21,8 @@ class CartView(View):
             "price"        : int(item_info.product_option.price),
             "total_price"  : int(item_info.price),
             "quantity"     : item_info.quantity,
+            "stock"        : item_info.product_option.quantity,
             "is_checked"   : True
         } for item_info in order_items]
 
-        return JsonResponse({'cart_info': cart_info}, status=200)
+        return JsonResponse({'selectedQty': cart_info}, status=200)
