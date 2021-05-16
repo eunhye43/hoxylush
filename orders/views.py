@@ -11,6 +11,7 @@ class CartView(View):
         order_items = request.user.order_set.get(order_status__status='장바구니').orderitem_set.all()
 
         cart_info = [{
+            "order_id"     : item_info.order_id,
             "id"           : item_info.product_id,
             "option_id"    : item_info.product_option_id,
             "name"         : item_info.product.name,
