@@ -9,11 +9,10 @@ class CartView(View):
     @login_required
     def get(self, request):
         order_items = request.user.order_set.get(order_status__status='장바구니').orderitem_set.all()
-        # order       = Order.objects.get(user=request.user, order_status=OrderStatus.objects.get(status='장바구니'))
-        # order_items = OrderItem.objects.filter(order=order)
 
         cart_info = [{
-            "id"           : item_info.product_option_id,
+            "id"           : item_info.product_id,
+            "option_id"    : item_info.product_option_id,
             "name"         : item_info.product.name,
             "sub_category" : item_info.product.sub_category.sub_title,
             "product_image": item_info.product.productimage_set.first().image_url,
