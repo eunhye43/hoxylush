@@ -10,6 +10,7 @@ from json.decoder         import JSONDecodeError
 from users.models import User
 from my_settings  import SECRET_KEY, ALGORITHM
 
+
 class SignUpView(View):
     def post(self, request):
         try:
