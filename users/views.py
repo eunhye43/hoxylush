@@ -22,7 +22,7 @@ class SignUpView(View):
             address      = data.get("address")
 
             email_validation    = re.compile('^[a-z0-9]+@[a-z0-9]+\.[a-z0-9.]+$', re.I)
-            password_validation = re.compile(r'^(?=.*[a-z])(?=.*[0-9])(?=.*[~!@#$%^&*]).{8,}', re.I)
+            password_validation = re.compile('^(?=.*[a-z])(?=.*[0-9]).{8,}', re.I)
 
             if not email_validation.match(email):
                 return JsonResponse({"MESSAGE" : "INVALID_EMAIL"}, status=400)
