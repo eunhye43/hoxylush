@@ -23,13 +23,14 @@ class ProductListView(View):
 
             product_list = [
                 {
-                    'product_id'       : product.id,
+                    'product_id'       : product.product_id,
                     'name'             : product.name,
                     'hashtag'          : product.hashtag,
                     'option' : [{
+                        'id'               : option.id,
                         'price'            : option.price,
                         'quantity'         : option.quantity,
-                        'weight'           : option.weight,
+                        'weight'           : option.weight, #필요한게 옵션의 아이디?
                         } for option in product.productoption_set.all()],
                     'image_url'        : product.productimage_set.first().image_url,
                     'tag'              : [tag.name for tag in product.tag_set.all()],
