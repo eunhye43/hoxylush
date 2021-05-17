@@ -1,15 +1,15 @@
 from django.http.response import JsonResponse
 from django.views         import View
 
+from orders.models        import OrderItem, Order
+
 from util.utils           import login_required
 
-
 class CartView(View):
-
     @login_required
     def get(self, request):
-        order_items = request.user.order_set.get(order_status__status='장바구니').orderitem_set.all()
-
+        order_items = OrderItem.objects.filter(order=Order.objects.get(user=request.user, order_status__status='장바구니'))
+        
         cart_info = [{
             "order_id"     : item_info.order_id,
             "id"           : item_info.product_id,
