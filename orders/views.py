@@ -11,7 +11,7 @@ class CartView(View):
     ORDER_STATUS = '장바구니'
 
     @login_required
-    def delete(self, request):
+    def patch(self, request):
         try:
             data                   = json.loads(request.body)
             product_option_id_list = [product_info['option_id'] for product_info in data]
