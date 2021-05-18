@@ -16,7 +16,10 @@ class CartView(View):
             data                   = json.loads(request.body)
             product_option_id_list = [product_info['option_id'] for product_info in data]
 
-            OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS, product_option_id__in=product_option_id_list).delete()
+            result, _ = OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS, product_option_id__in=product_option_id_list).delete()
+
+            if result == 0:
+                return JsonResponse({'MESSAGES': 'NOT_FOUND'}, status=404)
         except JSONDecodeError:
             return JsonResponse({'MESSAGES': 'EMPTY_ARGS_ERROR'}, status=400)
 
