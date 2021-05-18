@@ -14,9 +14,9 @@ class CartView(View):
     def patch(self, request):
         try:
             data                   = json.loads(request.body)
-            product_option_id_list = [product_info['option_id'] for product_info in data]
+            option_id_list = data.get('option_id_list')
 
-            result, _ = OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS, product_option_id__in=product_option_id_list).delete()
+            result, _ = OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS, product_option_id__in=option_id_list).delete()
 
             if result == 0:
                 return JsonResponse({'MESSAGES': 'NOT_FOUND'}, status=404)
