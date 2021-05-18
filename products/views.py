@@ -37,9 +37,7 @@ class ProductListView(View):
                 'weight'        : option.weight,
                 } for option in product.productoption_set.all()],
             'image_url'     : product.productimage_set.first().image_url,
-            'tag'    : [{
-                'id' : tag.id, 'tag': tag.name,
-                } for tag in product.tag_set.all()]
-        } for product in products]
+            'tag'    : [{'id' : tag.id, 'tag': tag.name} for tag in product.tag_set.all()]
+            } for product in products]
         
         return JsonResponse({'product_info' : product_list}, status = 200)
