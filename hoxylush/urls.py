@@ -17,5 +17,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path("users", include("users.urls")),
+<<<<<<< HEAD
     path("products", include("products.urls"))
+=======
+    path("orders", include("orders.urls")),
+    path("products", include("products.urls")),
+>>>>>>> 9144b68a617431a052bf66a7517334e18c8c793a
     ]
