@@ -1,21 +1,19 @@
 import json
 
-from django.shortcuts       import render
 from django.http            import JsonResponse
 from django.views           import View
 from django.db.models       import Q
 
 from products.models        import Category, Product, ProductImage, SubCategory, ProductTag, Tag
 
-
 class ProductListView(View):
-    def get(self, request):
-        category_id       = request.GET.get('category_id')
-        sub_category_id   = request.GET.get('sub_category_id')
-
-        pagination   = int(request.GET.get('pagination', 0))
-        limit        = int(request.GET.get('limit', 4))
-        offset       = pagination * 4
+    def post(self, request):
+        category_id       = request.POST.get('category_id')
+        sub_category_id   = request.POST.get('sub_category_id')
+        keyword           = request.POST.get('keyword')
+        pagination        = int(request.GET.get('pagination', 0))
+        limit             = int(request.GET.get('limit', 4))
+        offset            = pagination * 4
 
         if category_id or sub_category_id:
             products = Product.objects.filter(
