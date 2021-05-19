@@ -11,20 +11,16 @@ class CartView(View):
     ORDER_STATUS = '장바구니'
 
     @login_required
-    def patch(self, request):
+    def delete(self, request):
         try:
-            data                   = json.loads(request.body)
-            option_id_list = data.get('option_id_list')
-
-            result, _ = OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS, product_option_id__in=option_id_list).delete()
-
-            if result == 0:
-                return JsonResponse({'MESSAGES': 'NOT_FOUND'}, status=404)
+            option_id_list = request.GET.getlist('option-id')
+            OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS, product_option_id__in=option_id_list).delete()
         except JSONDecodeError:
             return JsonResponse({'MESSAGES': 'EMPTY_ARGS_ERROR'}, status=400)
+        except ValueError:
+            return JsonResponse({'MESSAGES': 'BAD_REQUEST'}, status=400)
+        return JsonResponse({'MESSAGES': 'SUCCESS'}, status=200)
 
-        return JsonResponse({'MESSAGES': 'SUCCESS'}, status=204)
-    
     @login_required
     def get(self, request):
         order_items = OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS)
