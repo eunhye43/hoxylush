@@ -24,6 +24,8 @@ class CartView(View):
             order_item.save()
         except JSONDecodeError:
             return JsonResponse({'MESSAGES': 'EMPTY_ARGS_ERROR'}, status=400)
+        except OrderItem.DoesNotExist:
+            return JsonResponse({'MESSAGES': 'NOT_EXISTS_OPTION_ID'}, status=404)
 
         return JsonResponse({'MESSAGES': 'SUCCESS'}, status=200)
 
@@ -53,6 +55,8 @@ class CartView(View):
             order_item.save()
         except JSONDecodeError:
             return JsonResponse({'MESSAGES': 'EMPTY_ARGS_ERROR'}, status=400)
+        except OrderItem.DoesNotExist:
+            return JsonResponse({'MESSAGES': 'NOT_EXISTS_OPTION_ID'}, status=404)
 
         return JsonResponse({'MESSAGES': 'SUCCESS'}, status=200)
 
