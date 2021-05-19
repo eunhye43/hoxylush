@@ -1,13 +1,26 @@
+import json
+from json.decoder         import JSONDecodeError
+
 from django.http.response import JsonResponse
 from django.views         import View
 
 from orders.models        import OrderItem
-
 from util.utils           import login_required
 
 class CartView(View):
     ORDER_STATUS = '장바구니'
-    
+
+    @login_required
+    def delete(self, request):
+        try:
+            option_id_list = request.GET.getlist('option-id')
+            OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS, product_option_id__in=option_id_list).delete()
+        except JSONDecodeError:
+            return JsonResponse({'MESSAGES': 'EMPTY_ARGS_ERROR'}, status=400)
+        except ValueError:
+            return JsonResponse({'MESSAGES': 'BAD_REQUEST'}, status=400)
+        return JsonResponse({'MESSAGES': 'SUCCESS'}, status=200)
+
     @login_required
     def get(self, request):
         order_items = OrderItem.objects.filter(order__user=request.user, order__order_status__status=self.ORDER_STATUS)
