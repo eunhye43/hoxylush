@@ -1,4 +1,4 @@
-# Wa:tta Taxi
+# Hoxy Lush
 
 > - [데모영상](https://www.youtube.com/watch?v=8nwI5xW3PWo)
 
